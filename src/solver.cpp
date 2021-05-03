@@ -2,7 +2,9 @@
 #include <solver.h>
 #include <utils.h>
 #include <eigen3/Eigen/Eigenvalues>
+#include <fstream>
 
+std::ofstream myfile;
 cSolver::cSolver()
 {
 
@@ -29,6 +31,11 @@ void cSolver::calib(std::vector<cSynchronizer::sync_data> &calib_data, int outli
                 << "LiDAR-odom y: " << res.l[1] << '\n' << "LiDAR-odom yaw: " << res.l[2] << '\n' << "Left wheel radius: " << res.radius_l << '\n'
                 << "Right wheel radius: " << res.radius_r << std::endl;
     }
+
+    
+    myfile.open ("/home/dfl-nuc/temp_ws/src/ugv_calibration/results/lidar_odom_results.txt");
+    myfile << res.l[0] << " " << res.l[1] << " " << res.l[2];
+    myfile.close();
 
     // Compute residuals
     for (int i = 0; i < calib_data.size(); i++)
@@ -156,7 +163,7 @@ bool cSolver::solve(const std::vector<cSynchronizer::sync_data> &calib_data,
   // Verify that A isn't singular
   Eigen::JacobiSVD<Eigen::MatrixXd> svd(A);
   double cond = svd.singularValues()(0) / svd.singularValues()(svd.singularValues().size() - 1);
-  if (cond > max_cond_number)
+  if (cond > 160)
   {
     std::cout << colouredString("Matrix A is almost singular.", RED, BOLD) << std::endl;
     return 0;

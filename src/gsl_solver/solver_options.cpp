@@ -29,7 +29,7 @@ void solver_options(solver_params *p, struct option*ops) {
 		
 	options_int(ops, "debug", &(p->debug), 0, "Shows debug information");
 
-	options_double(ops, "max_cond_number", &(p->max_cond_number), 75, 
+	options_double(ops, "max_cond_number", &(p->max_cond_number), 160, 
 		"Max condition number allowed for the first linear estimation step." );
 		
 }
